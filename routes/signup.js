@@ -79,10 +79,14 @@ router.post('/submit', (req, res) => {
     if(areTrue){
       const salt = await bcrypt.genSalt(10);
       password = await bcrypt.hash(password, salt);
-      var sql = `INSERT INTO accounts (username, password) VALUES ("${username}", "${password}")`;
-      db.query(sql, function(err, result) {
+      var sql1 = `INSERT INTO accounts (username, password) VALUES ("${username}", "${password}");`;
+      var sql2 = `CREATE TABLE ${username} (id INT NOT NULL AUTO_INCREMENT, goal INT, drank_today BOOL, date DATE, PRIMARY KEY (id));`;
+      db.query(sql1, function(err, result) {
         if (err) throw err;
-        res.send("Successful");
+        db.query(sql2, function(err, result) {
+          if (err) throw err;
+          res.send("Successful");
+        });
       });
     }else{
       res.send(validation);
