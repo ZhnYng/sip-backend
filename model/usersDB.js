@@ -42,6 +42,19 @@ const userDB = {
                 }
             })
         })
+    },
+
+    getUsernameById : function(userId, callback){
+        var dbConn = db.getConnection();
+        dbConn.connect((err, result) => {
+            if(err) return callback(err, null);
+            const sqlStmt = "SELECT username FROM users WHERE user_id = ?;";
+            dbConn.query(sqlStmt, [userId], async(err, result) => {
+                dbConn.end();
+                if(err) return callback(err, null);
+                return callback(null, result);
+            })
+        })
     }
 }
 

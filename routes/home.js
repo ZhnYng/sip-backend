@@ -2,9 +2,9 @@ var express = require('express');
 var router = express.Router();
 const drinksDB = require('../model/drinksDB');
 const goalDB = require('../model/goalDB');
+const userDB = require('../model/usersDB');
 
-router.get('/', (req, res) => {
-  let output = {}
+router.get('/goal', (req, res) => {
   goalDB.getGoal(req.query.userId, (err, result) =>  {
     if(err){
       console.log(err);
@@ -12,24 +12,40 @@ router.get('/', (req, res) => {
     }else if(result.length === 0){
       res.status(204).send();
     }else{
-      output['goal'] = result;
-      drinksDB.getDrinks(req.params.userId, (err, result) => {
-        if(err){
-          console.log(err);
-          res.status(500).send({"error msg" : "internal server error"});
-        }else if(result.length === 0){
-          res.status(204).send();
-        }else{
-          output['drinks'] = result;
-          res.status(200).send(output);
-        }
-      })
+      res.status(200).send(result);
     }
   })
 })
 
+router.get('/drinks', (req, res) => {
+  drinksDB.getDrinks(req.query.userId, (err, result) =>  {
+    if(err){
+      console.log(err);
+      res.status(500).send({"error msg" : "internal server error"});
+    }else if(result.length === 0){
+      res.status(204).send();
+    }else{
+      res.status(200).send(result);
+    }
+  })
+})
+
+router.get('/username', (req, res) => {
+  userDB.getUsernameById(req.query.userId, (err, result) =>  {
+    if(err){
+      console.log(err);
+      res.status(500).send({"error msg" : "internal server error"});
+    }else if(result.length === 0){
+      res.status(204).send();
+    }else{
+      res.status(200).send(result);
+    }
+  })
+})
+
+
 router.put('/updateGoal/:userId', (req, res) => {
-  goalDB.updateGoal(req.params.userId, req.body.goal, (err, result) => {
+  goalDB.updateGoal(req.query.userId, req.body.goal, (err, result) => {
     if(err?.code === "ER_BAD_NULL_ERROR"){
       res.status(400).send({"error msg" : "goal cannot be null"});
     }else if(err){
