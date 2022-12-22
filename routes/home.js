@@ -43,6 +43,31 @@ router.get('/username', (req, res) => {
   })
 })
 
+router.get('/lastDrank', (req, res) => {
+  drinksDB.getLastDrank(req.query.userId, (err, result) =>  {
+    if(err){
+      console.log(err);
+      res.status(500).send({"error msg" : "internal server error"});
+    }else if(result.length === 0){
+      res.status(204).send();
+    }else{
+      res.status(200).send(result);
+    }
+  })
+})
+
+router.get('/daysFromlastDrank', (req, res) => {
+  drinksDB.getDaysFromLastDrank(req.query.userId, (err, result) =>  {
+    if(err){
+      console.log(err);
+      res.status(500).send({"error msg" : "internal server error"});
+    }else if(result.length === 0){
+      res.status(204).send();
+    }else{
+      res.status(200).send(result);
+    }
+  })
+})
 
 router.put('/updateGoal', (req, res) => {
   goalDB.updateGoal(req.query.userId, req.body.goal, (err, result) => {
@@ -60,28 +85,28 @@ router.put('/updateGoal', (req, res) => {
   })
 })
 
-router.put('/updateAdd/:userId', (req, res) => {
-  drinksDB.addDrink(req.params.userId, (err, result) => {
+router.put('/addDrink', (req, res) => {
+  drinksDB.addDrink(req.query.userId, (err, result) => {
     if(err){
       console.error(err);
       res.status(500).send({"error msg" : "internal server error"});
     }else if(result.affectedRows === 0){
       res.status(204).send();
     }else{
-      res.status(200).send({"success msg" : "one drink added"});
+      res.status(201).send({"success msg" : "one drink added"});
     }
   })
 })
 
-router.put('/updateRemove/:userId', (req, res) => {
-  drinksDB.removeDrink(req.params.userId, (err, result) => {
+router.put('/removeDrink', (req, res) => {
+  drinksDB.removeDrink(req.query.userId, (err, result) => {
     if(err){
       console.error(err);
       res.status(500).send({"error msg" : "internal server error"});
     }else if(result.affectedRows === 0){
       res.status(204).send();
     }else{
-      res.status(200).send({"success msg" : "one drink removed"});
+      res.status(201).send({"success msg" : "one drink removed"});
     }
   })
 })

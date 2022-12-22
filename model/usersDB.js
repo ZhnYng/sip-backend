@@ -14,13 +14,9 @@ const userDB = {
                 if(err) return callback(err, null);
                 const sqlStmt = "INSERT INTO goal (goal, user_id) VALUES (0, (SELECT user_id FROM users ORDER BY user_id DESC LIMIT 1));";
                 dbConn.query(sqlStmt, [], (err, result) => {
+                    dbConn.end();
                     if(err) return callback(err, null);
-                    const sqlStmt = "INSERT INTO drinks (drinks, user_id) VALUES (0, (SELECT user_id FROM users ORDER BY user_id DESC LIMIT 1));";
-                    dbConn.query(sqlStmt, [], (err, result) => {
-                        dbConn.end();
-                        if(err) return callback(err, null);
-                        return callback(null, result);
-                    })
+                    return callback(null, result);
                 })
             })
         })
