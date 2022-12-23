@@ -77,7 +77,6 @@ router.put('/updateGoal', (req, res) => {
       console.error(err);
       res.status(500).send({"error msg" : "internal server error"});
     }else if(result.affectedRows === 0){
-      console.log(req.body)
       res.status(204).send();
     }else{
       res.status(201).send({"success msg" : "goal updated successfully"});
