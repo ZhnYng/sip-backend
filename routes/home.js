@@ -69,21 +69,6 @@ router.get('/daysFromlastDrank', (req, res) => {
   })
 })
 
-router.put('/updateGoal', (req, res) => {
-  goalDB.updateGoal(req.query.userId, req.body.goal, (err, result) => {
-    if(err?.code === "ER_BAD_NULL_ERROR"){
-      res.status(400).send({"error msg" : "goal cannot be null"});
-    }else if(err){
-      console.error(err);
-      res.status(500).send({"error msg" : "internal server error"});
-    }else if(result.affectedRows === 0){
-      res.status(204).send();
-    }else{
-      res.status(201).send({"success msg" : "goal updated successfully"});
-    }
-  })
-})
-
 router.put('/addDrink', (req, res) => {
   drinksDB.addDrink(req.query.userId, (err, result) => {
     if(err){

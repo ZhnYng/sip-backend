@@ -51,6 +51,32 @@ const userDB = {
                 return callback(null, result);
             })
         })
+    },
+
+    getReminderStatus : function(userId, callback){
+        var dbConn = db.getConnection();
+        dbConn.connect((err, result) => {
+            if(err) return callback(err, null);
+            const sqlStmt = "SELECT reminder FROM users WHERE user_id = ?;";
+            dbConn.query(sqlStmt, [userId], (err, result) => {
+                dbConn.end();
+                if(err) return callback(err, null);
+                return callback(null, result);
+            })
+        })
+    },
+    
+    updateReminderStatus : function(userId, updatedStatus, callback){
+        var dbConn = db.getConnection();
+        dbConn.connect((err, result) => {
+            if(err) return callback(err, null);
+            const sqlStmt = "UPDATE users SET reminder = ? WHERE user_id = ?;";
+            dbConn.query(sqlStmt, [updatedStatus, userId], (err, result) => {
+                dbConn.end();
+                if(err) return callback(err, null);
+                return callback(null, result);
+            })
+        })
     }
 }
 
