@@ -7,7 +7,7 @@ router.post('/submit', (req, res) => {
     if(err){
       console.error(err);
       res.status(500).send({"error msg" : "internal server error"});
-    }else if(result == "password invalid"){
+    }else if(result === "password invalid"){
       res.status(200).send({"success msg" : result})
     }else{
       res.status(200).send(result)
